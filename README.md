@@ -23,7 +23,7 @@ web_1  |  * Restarting with stat
 Remember the IP address you get in the terminal, all API requests should be directed to it, yours might differ.
 
 ## API Documentation:
-**Notice**: every short URL has a lifespan of 30 days, after which they get deleted from the database.
+**Notice**: every short URL has a lifespan of 30 days, after which they get deleted from the database by runnind a simple CRON job. Using Apache Airflow could also have been an option, if the scope of the API was much larger.
 
 * POST /api/users  
 
