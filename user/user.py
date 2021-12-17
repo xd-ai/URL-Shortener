@@ -7,6 +7,9 @@ user_app = Blueprint('user_app', __name__)
 
 @user_app.route('/api/users', methods=['POST'])
 def new_user():
+    """
+    Creates a new user
+    """
     email = request.json.get('email')
     password = request.json.get('password')
     is_premium = request.json.get('premium')
@@ -20,14 +23,21 @@ def new_user():
     db.session.commit()
     return {'message': 'User created'}, 200
 
-@user_app.route('/api/token')
+@user_app.route('/api/token', methods=['GET'])
 @auth.login_required
 def get_token():
+    """
+    Returns a auth token for the user logged in, which can be used
+    for future authentications, instead of credentials
+    """
     return jsonify({'token': g.user.generate_token().decode("utf-8")}), 200
 
 
 @auth.verify_password
 def verify_password(email, password):
+    """
+    verify_password function for HTTPAuth
+    """
     user = User.verify_token(email)
     if not user:
         user = User.query.filter_by(email=email).first()
@@ -37,6 +47,12 @@ def verify_password(email, password):
     return True
 
 class User(db.Model):
+    """
+    The User Class Model, referencing to 'users' table in the database
+    
+    Should ALWAYS be initialized like this: User(email=myemail, is_premium=premium)
+    NEVER initialize with a password without calling .hash_password before committing.
+    """
     __tablename__ = 'users'
 
     email = db.Column(db.String(100), primary_key=True)
@@ -44,20 +60,29 @@ class User(db.Model):
     is_premium = db.Column(db.Boolean(), default=False, nullable=False)
 
     def hash_password(self, pw: str):
+        """
+        Hashes the password to be stored in the database
+        """
         self.password = generate_password_hash(pw)
 
     def check_password(self, pw: str) -> bool:
+        """
+        Checks for the correct password by comparing the hashes
+        """
         return check_password_hash(self.password, pw)
 
-    def get_id(self) -> str:
-        return self.email
-
     def generate_token(self):
+        """
+        Generates an auth token for the user
+        """
         s = Serializer(app.config['SECRET_KEY'])
         return s.dumps({'email': self.email})
 
     @staticmethod
     def verify_token(token):
+        """
+        Verifies the auth token and returns the user if found, None if not found
+        """
         s = Serializer(app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
