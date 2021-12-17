@@ -1,11 +1,12 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+import time
+from setup import app, db
+from user.user import user_app
+from apis.shortener import url_app, URL
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:postgres@localhost/shortener'
+app.register_blueprint(user_app)
+app.register_blueprint(url_app)
+db.init_app(app)
 
-db = SQLAlchemy()
-
-login_manager = LoginManager()
+if __name__ == '__main__':
+    app.run(debug=True)
 

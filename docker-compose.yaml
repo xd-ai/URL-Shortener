@@ -1,0 +1,18 @@
+web:
+  build: .
+  command: python3 app.py
+  ports:
+    - "5000:5000"
+  links:
+    - db
+
+db:
+  image: postgres
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: shortener
+  ports:
+      - 5432:5432
+  restart: always
+
