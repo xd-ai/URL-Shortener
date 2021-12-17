@@ -23,6 +23,7 @@ web_1  |  * Restarting with stat
 Remember the IP address you get in the terminal, all API requests should be directed to it, yours might differ.
 
 ## API Documentation:
+**Notice**: every short URL has a lifespan of 30 days, after which they get deleted from the database.
 
 * POST /api/users  
 
@@ -58,6 +59,7 @@ Remember the IP address you get in the terminal, all API requests should be dire
   The long URL passed must be in valid format(starting with `https://` or `http://` and contain no spaces or double quotes).  
   Success: status code 201 with a JSON object containing `short_url` field.  
   Failure: status code 400 one of the abovementione requirements was not matched or 401 if authentication failed.  
+  
   
 ## Examples
 
