@@ -22,7 +22,7 @@ ALTER TABLE public.slug OWNER TO postgres;
 --
 
 CREATE TABLE public.urls (
-    id character varying(7) NOT NULL,
+    id character varying NOT NULL,
     url character varying(249) NOT NULL,
     owner character varying(100) NOT NULL,
     times_accessed bigint DEFAULT 0 NOT NULL,

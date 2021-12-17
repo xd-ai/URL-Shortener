@@ -45,7 +45,7 @@ def generate_random_url():
     short_url = URL(id=_b62encode(slug_count.count), url=long_url, owner=user.email)
     db.session.add(short_url)
     db.session.commit()
-    return short_url.id, 201
+    return {'short_url': short_url.id}, 201
 
 @url_app.route('/api/custom', methods=['GET'])
 @auth.login_required
@@ -72,7 +72,7 @@ def generate_custom_url():
     short_url = URL(id=custom_url, url=long_url, owner=user.email)
     db.session.add(short_url)
     db.session.commit()
-    return short_url.id, 201
+    return {'short_url': short_url.id}, 201
     
 @url_app.route('/<id>')
 def url_redirect(id):
@@ -132,7 +132,7 @@ class URL(db.Model):
 
     """
     __tablename__ = 'urls'
-    id = db.Column(db.String(10), primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     url = db.Column(db.String(249), nullable=False)
     owner = db.Column(db.String(256), db.ForeignKey('users.email'))
     times_accessed = db.Column(db.Integer, default=0)
