@@ -2,7 +2,7 @@ web:
   build: .
   command: python3 app.py
   ports:
-    - "5000:5000"
+    - "5001:5000"
   links:
     - db
 
@@ -13,6 +13,8 @@ db:
     POSTGRES_PASSWORD: postgres
     POSTGRES_DB: shortener
   ports:
-      - 5432:5432
+      - 5435:5432
   restart: always
+  volumes:
+    - ./db_init:/docker-entrypoint-initdb.d
 
